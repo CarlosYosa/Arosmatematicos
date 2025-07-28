@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aros Matemáticos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Aros Matemáticos</h1>
+            <div class="round-selector">
+                <button id="round1" class="round-btn active" data-round="1">Ronda 1</button>
+                <button id="round2" class="round-btn" data-round="2">Ronda 2</button>
+                <button id="round3" class="round-btn" data-round="3">Ronda 3</button>
+            </div>
+        </header>
+
+        <main>
+            <div class="problem-container">
+                <div class="problem-display" id="problemDisplay">
+                    ¡Bienvenido a Aros Matemáticos!
+                </div>
+                <div class="solution-display" id="solutionDisplay">
+                    Presiona "Siguiente" para comenzar
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="nextBtn" class="next-btn">Siguiente ➡️</button>
+            </div>
+
+            <div class="stats">
+                <p>Ronda actual: <span id="currentRound">1</span></p>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

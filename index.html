@@ -4,39 +4,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aros Matemáticos</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .round-btn {
+            background-color: #2196F3;
+        }
+        .round-btn.active {
+            background-color: #ff9800;
+        }
+        .problem {
+            font-size: 24px;
+            margin: 20px 0;
+            min-height: 50px;
+        }
+        .solution {
+            font-size: 20px;
+            color: #4CAF50;
+            min-height: 30px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🎯 Aros Matemáticos</h1>
-            <div class="round-selector">
-                <button id="round1" class="round-btn active" data-round="1">Ronda 1</button>
-                <button id="round2" class="round-btn" data-round="2">Ronda 2</button>
-                <button id="round3" class="round-btn" data-round="3">Ronda 3</button>
-            </div>
-        </header>
-
-        <main>
-            <div class="problem-container">
-                <div class="problem-display" id="problemDisplay">
-                    ¡Bienvenido a Aros Matemáticos!
-                </div>
-                <div class="solution-display" id="solutionDisplay">
-                    Presiona "Siguiente" para comenzar
-                </div>
-            </div>
-
-            <div class="controls">
-                <button id="nextBtn" class="next-btn">Siguiente ➡️</button>
-            </div>
-
-            <div class="stats">
-                <p>Ronda actual: <span id="currentRound">1</span></p>
-            </div>
-        </main>
+        <h1>🎯 Aros Matemáticos</h1>
+        
+        <div>
+            <button class="round-btn active" onclick="setRound(1)">Ronda 1</button>
+            <button class="round-btn" onclick="setRound(2)">Ronda 2</button>
+            <button class="round-btn" onclick="setRound(3)">Ronda 3</button>
+        </div>
+        
+        <div class="problem" id="problem">¡Bienvenido! Haz clic en "Siguiente"</div>
+        <div class="solution" id="solution"></div>
+        
+        <button onclick="generateProblem()">Siguiente ➡️</button>
+        
+        <p>Ronda actual: <span id="currentRound">1</span></p>
     </div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+    <script>
+        let currentRound = 1;
+
+        function setRound(round) {
+            currentRound = round;
+            document.getElementById('currentRound').textContent = round;
+            
+            // Actualizar botones activos
+            const buttons = document.querySelectorAll('.round-btn');
+            buttons.forEach((btn, index) => {
+                if (index === round - 1) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+
+        function simplifyFraction(num, den) {
+            if (den === 0) return [num, 1];
+            const g = gcd(Math.abs(num), Math.abs(den));
+            return [num / g, den / g];
+        }
+
+        function generateRound1() {
+            const a = Math.floor(Math.random() * 12) + 1;
+            const b = Math.floor(Math.random() * 12) + 1;
+            const r = a * b;
+            
+            document.getElementById('problem').innerHTML = `${a} × ${b} = ?`;
+            document.getElementById('solution').textContent = `Resultado: ${r}`;
+        }
+
+        function generateRound2() {
+            const a = Math.floor(Math.random() * 15) + 1;
+            const b = Math.floor(Math.random() * 15) + 1;
+            const c = Math.floor(Math.random() * 15) + 1;
+            
+            const multiplication = a * b;
+            const isAddition = Math.random() < 0.5;
+            const r = isAddition ? multiplication + c : multiplication - c;
+            const operator = isAddition ? '+' : '-';
+            
+            document.getElementById('problem').innerHTML = `${a} × ${b} ${operator} ${c} = ?`;
+            document.getElementById('solution').textContent = `Resultado: ${r}`;
+        }
+
+        function generateRound3() {
+            let a = Math.floor(Math.random() * 10) + 1;
+            let b = Math.floor(Math.random() * 10) + 1;
+            let c = Math.floor(Math.random() * 10) + 1;
+            let d = Math.floor(Math.random() * 10) + 1;
+            
+            [a, b] = simplifyFraction(a, b);
+            [c, d] = simplifyFraction(c, d);
+            
+            const isAddition = Math.random() < 0.5;
+            const operator = isAddition ? '+' : '−';
+            
+            const lcd = (b * d) / gcd(b, d);
+            const num1 = a * (lcd / b);
+            const num2 = c * (lcd / d);
+            let resultNum = isAddition ? num1 + num2 : num1 - num2;
+            let resultDen = lcd;
+            
+            [resultNum, resultDen] = simplifyFraction(resultNum, resultDen);
+            
+            document.getElementById('problem').innerHTML = 
+                `${a}/${b} ${operator} ${c}/${d} = ?`;
+            
+            if (resultDen === 1) {
+                document.getElementById('solution').innerHTML = `Resultado: ${resultNum}`;
+            } else {
+                document.getElementById('solution').innerHTML = `Resultado: ${resultNum}/${resultDen}`;
+            }
+        }
+
+        function generateProblem() {
+            switch (currentRound) {
+                case 1:
+                    generateRound1();
+                    break;
+                case 2:
+                    generateRound2();
+                    break;
+                case 3:
+                    generateRound3();
+                    break;
+            }
+        }
+
+        // Generar primer problema cuando carga la página
+        window.onload = function() {
+            generateProblem();
+        };
+    </script>
+</body
